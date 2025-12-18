@@ -1,78 +1,96 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaishu Unlimited AI ✨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vaishu Super AI ✨</title>
     <style>
-        :root { --main-color: #00f2fe; --bg-color: #000000; }
-        body { background: var(--bg-color); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
-        .app-container { max-width: 550px; margin: 20px auto; border: 1px solid #333; border-radius: 20px; background: #080808; box-shadow: 0 0 20px rgba(0,242,254,0.2); }
-        .header { background: #111; padding: 20px; border-bottom: 1px solid #222; font-size: 22px; font-weight: bold; color: var(--main-color); }
-        #chatDisplay { height: 350px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { padding: 12px 16px; border-radius: 18px; max-width: 80%; font-size: 15px; line-height: 1.5; }
-        .user { align-self: flex-end; background: #007bff; color: white; }
-        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; }
-        .controls { padding: 20px; background: #0a0a0a; border-top: 1px solid #222; display: flex; flex-direction: column; gap: 10px; }
-        input, select { padding: 14px; border-radius: 12px; border: 1px solid #333; background: #151515; color: white; outline: none; font-size: 16px; }
-        .magic-btn { background: var(--main-color); color: black; border: none; padding: 16px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 17px; transition: 0.3s; }
-        .magic-btn:active { transform: scale(0.96); }
-        img, video { width: 100%; border-radius: 12px; margin-top: 12px; border: 1px solid #444; }
-        .loading { color: #ffd700; font-size: 14px; display: none; }
+        :root { --glow: #00f2fe; --bg: #000000; }
+        * { box-sizing: border-box; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* స్క్రీన్ కదలకుండా ఉండటానికి */
+        }
+        .full-container { 
+            display: flex; flex-direction: column; height: 100vh; width: 100%; 
+            padding: 10px; background: radial-gradient(circle at top, #001f3f, #000);
+        }
+        .header { 
+            padding: 15px; text-align: center; font-size: 22px; font-weight: bold; 
+            color: var(--glow); text-shadow: 0 0 10px var(--glow);
+        }
+        #chatDisplay { 
+            flex: 1; overflow-y: auto; padding: 15px; border-radius: 20px;
+            background: rgba(255,255,255,0.05); border: 1px solid #222;
+            margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px;
+        }
+        .msg { padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.4; }
+        .user { align-self: flex-end; background: #007bff; color: white; border-bottom-right-radius: 2px; }
+        .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; }
+        .input-box { 
+            background: #111; padding: 15px; border-radius: 20px; 
+            border: 1px solid #333; display: flex; flex-direction: column; gap: 10px;
+        }
+        input, select { 
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #444;
+            background: #000; color: white; font-size: 16px; outline: none;
+        }
+        .send-btn { 
+            background: var(--glow); color: black; border: none; padding: 15px;
+            border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer;
+        }
+        img, video { width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--glow); }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="full-container">
         <div class="header">Vaishu Super AI ✨</div>
         <div id="chatDisplay">
-            <div class="msg ai">Hello Vaishu! I am ready. What do you want to create or ask today? Everything is unlimited! 🚀</div>
+            <div class="msg ai">Hello Vaishu! I am your Full-Screen AI. Ready to chat, draw, or make videos! 🚀</div>
         </div>
-        <div class="controls">
+        <div class="input-box">
             <select id="mode">
-                <option value="chat">💬 Chat (Free & Unlimited)</option>
-                <option value="image">🎨 Generate Image (Unlimited)</option>
-                <option value="video">🎬 Generate Video (Unlimited)</option>
+                <option value="chat">💬 Chat with AI</option>
+                <option value="image">🎨 Create Image</option>
+                <option value="video">🎬 Create Video</option>
             </select>
-            <input type="text" id="userInput" placeholder="Ask anything...">
-            <button class="magic-btn" onclick="runMagic()">Send Magic 🚀</button>
-            <div id="status" class="loading">Working on it... ✨</div>
+            <input type="text" id="userInput" placeholder="Ask me anything...">
+            <button class="send-btn" onclick="startMagic()">SEND MAGIC 🚀</button>
         </div>
     </div>
 
     <script>
-        async function runMagic() {
+        async function startMagic() {
             const input = document.getElementById('userInput').value;
             const mode = document.getElementById('mode').value;
             const chat = document.getElementById('chatDisplay');
-            const status = document.getElementById('status');
             if(!input) return;
 
             chat.innerHTML += `<div class="msg user">${input}</div>`;
-            status.style.display = 'block';
+            const aiId = "ai-" + Date.now();
+            chat.innerHTML += `<div class="msg ai" id="${aiId}">Thinking... 🧠</div>`;
             document.getElementById('userInput').value = "";
             chat.scrollTop = chat.scrollHeight;
 
-            const seed = Math.floor(Math.random() * 1000000);
+            const seed = Math.floor(Math.random() * 999999);
+            const aiMsg = document.getElementById(aiId);
 
             try {
                 if(mode === 'chat') {
-                    const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
-                    const data = await res.text();
-                    chat.innerHTML += `<div class="msg ai">${data}</div>`;
+                    const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
+                    aiMsg.innerText = await r.text();
                 } else if(mode === 'image') {
                     const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=1024&height=1024&seed=${seed}`;
-                    chat.innerHTML += `<div class="msg ai">Done! <br><img src="${url}"></div>`;
+                    aiMsg.innerHTML = `Done! 🎨<br><img src="${url}">`;
                 } else {
                     const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=512&height=512&seed=${seed}&model=video`;
-                    chat.innerHTML += `<div class="msg ai">Done! <br><video src="${url}" controls autoplay loop></video></div>`;
+                    aiMsg.innerHTML = `Done! 🎬<br><video src="${url}" controls autoplay loop></video>`;
                 }
-            } catch (e) {
-                chat.innerHTML += `<div class="msg ai">Error! Please try again.</div>`;
-            }
-            status.style.display = 'none';
+            } catch (e) { aiMsg.innerText = "Error! Try again."; }
             chat.scrollTop = chat.scrollHeight;
         }
     </script>
 </body>
 </html>
-
