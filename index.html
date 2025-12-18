@@ -1,102 +1,30 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>వైషు మ్యాజిక్ AI ✨</title>
+    <title>Vaishu Magic Studio AI ✨</title>
     <style>
         :root { --main: #ff007f; --bg: #0f0c29; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px; transition: 0.5s; }
-        .container { max-width: 400px; margin: auto; background: rgba(255,255,255,0.1); padding: 25px; border-radius: 25px; border: 2px solid var(--main); box-shadow: 0 0 20px var(--main); }
-        input { width: 90%; padding: 12px; border-radius: 20px; border: none; margin-bottom: 15px; outline: none; font-size: 16px; color: #333; }
-        .btn { background: var(--main); color: white; border: none; padding: 12px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; font-size: 16px; }
-        #output { width: 100%; border-radius: 15px; margin-top: 15px; display: none; border: 3px solid white; }
+        body { background: var(--bg); color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; border: 2px solid var(--main); box-shadow: 0 0 20px var(--main); }
+        input, select { width: 90%; padding: 12px; border-radius: 20px; border: none; margin-bottom: 10px; font-size: 16px; outline: none; }
+        .btn { background: var(--main); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; width: 100%; font-weight: bold; font-size: 18px; margin-top: 10px; transition: 0.3s; }
+        .btn:active { transform: scale(0.95); }
+        #outputImage, #outputVideo { width: 100%; border-radius: 15px; margin-top: 15px; display: none; border: 2px solid white; }
+        .loading { display: none; color: #ffff00; margin-top: 10px; font-weight: bold; }
         .action-btns { display: none; gap: 10px; margin-top: 15px; }
-        .share-btn { background: #25d366; flex: 1; }
-        .down-btn { background: #34b7f1; flex: 1; }
-        .theme-panel { margin-top: 25px; display: flex; justify-content: center; gap: 15px; }
-        .dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid white; }
+        .save-btn { background: #34b7f1; flex: 1; padding: 10px; border-radius: 10px; color: white; text-decoration: none; font-weight: bold; }
     </style>
 </head>
-<body onload="welcome()">
-
+<body>
     <div class="container">
-        <h2>వైషు మ్యాజిక్ స్టూడియో ✨</h2>
-        <input type="text" id="userPrompt" placeholder="ఏమి గీయాలి? (English)">
-        <button class="btn" onclick="generateArt()">మ్యాజిక్ స్టార్ట్ చెయ్ 🚀</button>
+        <h2>Vaishu Magic Studio ✨</h2>
+        <input type="text" id="userPrompt" placeholder="What to create? (English)">
         
-        <p id="loadingMsg" style="display:none; color: #ffff00; font-weight: bold;">AI గీస్తోంది... 🎨</p>
-        <img id="output" src="">
+        <select id="contentType">
+            <option value="image">Create Image 🎨</option>
+            <option value="video">Create Video 🎬</option>
+        </select>
 
-        <div id="actionArea" class="action-btns">
-            <button class="btn share-btn" onclick="shareToWA()">WhatsApp 📲</button>
-            <button class="btn down-btn" onclick="downloadImg()">Save 📥</button>
-        </div>
-
-        <div class="theme-panel">
-            <div class="dot" style="background:#ff007f" onclick="updateTheme('#ff007f', '#0f0c29')"></div>
-            <div class="dot" style="background:#00d4ff" onclick="updateTheme('#00d4ff', '#1a1a1a')"></div>
-            <div class="dot" style="background:#4caf50" onclick="updateTheme('#4caf50', '#002200')"></div>
-        </div>
-    </div>
-
-    <script>
-        function talk(msg) {
-            let speech = new SpeechSynthesisUtterance(msg);
-            speech.lang = 'te-IN'; 
-            window.speechSynthesis.speak(speech);
-        }
-
-        function welcome() {
-            talk("వెల్కమ్ వైషు! నీ మ్యాజిక్ యాప్ రెడీగా ఉంది.");
-        }
-
-        function generateArt() {
-            let prompt = document.getElementById('userPrompt').value;
-            let img = document.getElementById('output');
-            let loader = document.getElementById('loadingMsg');
-            let actions = document.getElementById('actionArea');
-
-            if(!prompt) {
-                talk("ముందు ఏదైనా టైప్ చేయు వైషు");
-                return;
-            }
-
-            talk("సరే వైషు, నీ కోసం బొమ్మను గీస్తున్నాను.");
-            loader.style.display = "block";
-            img.style.display = "none";
-            actions.style.display = "none";
-
-            let finalUrl = "https://pollinations.ai/p/" + encodeURIComponent(prompt) + "?width=500&height=500&seed=" + Math.random();
-            img.src = finalUrl;
-
-            img.onload = function() {
-                loader.style.display = "none";
-                img.style.display = "block";
-                actions.style.display = "flex";
-                talk("బొమ్మ సిద్ధంగా ఉంది!");
-            }
-        }
-
-        function updateTheme(mainCol, bgCol) {
-            document.documentElement.style.setProperty('--main', mainCol);
-            document.documentElement.style.setProperty('--bg', bgCol);
-        }
-
-        function shareToWA() {
-            let link = document.getElementById('output').src;
-            window.open("https://api.whatsapp.com/send?text=వైషు AI గీసిన బొమ్మ చూడు: " + encodeURIComponent(link));
-        }
-
-        async function downloadImg() {
-            let imgUrl = document.getElementById('output').src;
-            const res = await fetch(imgUrl);
-            const blob = await res.blob();
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "Vaishu_AI.jpg";
-            a.click();
-        }
-    </script>
-</body>
-</html>
+        <button
