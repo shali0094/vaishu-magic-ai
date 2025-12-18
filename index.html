@@ -3,39 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>వైషు మ్యాజిక్ AI ✨</title>
+    <title>వైషు మ్యాజిక్ AI 2.0 ✨</title>
     <style>
         :root { --main: #ff007f; --bg: #0f0c29; }
         body { background: var(--bg); color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 400px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; }
-        input { width: 90%; padding: 12px; border-radius: 20px; border: none; margin-bottom: 10px; }
-        .btn { background: var(--main); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; width: 100%; font-weight: bold; }
-        #output { width: 100%; border-radius: 15px; margin-top: 15px; display: none; }
+        .container { max-width: 400px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; border: 2px solid var(--main); box-shadow: 0 0 20px var(--main); }
+        input, select { width: 90%; padding: 12px; border-radius: 20px; border: none; margin-bottom: 10px; font-size: 16px; }
+        .btn { background: var(--main); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; width: 100%; font-weight: bold; font-size: 18px; margin-top: 10px; }
+        #outputImage, #outputVideo { width: 100%; border-radius: 15px; margin-top: 15px; display: none; border: 2px solid white; }
+        .loading { display: none; color: #ffff00; margin-top: 10px; font-weight: bold; }
+        .action-btns { display: none; gap: 10px; margin-top: 15px; }
+        .save-btn { background: #34b7f1; flex: 1; padding: 10px; border-radius: 10px; color: white; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>వైషు మ్యాజిక్ స్టూడియో ✨</h2>
-        <input type="text" id="userPrompt" placeholder="ఏమి గీయాలి? (English)">
-        <button class="btn" onclick="generateArt()">మ్యాజిక్ స్టార్ట్ చేయ్ 🚀</button>
-        <p id="loadingMsg" style="display:none; color:#ffff00;">లోడ్ అవుతోంది...</p>
-        <img id="output" src="">
+        <input type="text" id="userPrompt" placeholder="ఏమి గీయాలి/తయారు చేయాలి? (English)">
+        
+        <select id="contentType">
+            <option value="image">బొమ్మ (Image)</option>
+            <option value="video">వీడియో (Video)</option>
+        </select>
+
+        <button class="btn" onclick="generateContent()">మ్యాజిక్ స్టార్ట్ చేయ్ 🚀</button>
+        
+        <p id="statusMsg" class="loading">మ్యాజిక్ జరుగుతోంది... 🪄</p>
+        
+        <img id="outputImage" src="">
+        <video id="outputVideo" controls autoplay loop muted></video>
+
+        <div id="actionArea" class="action-btns">
+            <a id="downloadBtn" class="save-btn" href="#" download="vaishu_magic.png">Save 📥</a>
+        </div>
     </div>
+
     <script>
-        function generateArt() {
+        function generateContent() {
             const prompt = document.getElementById('userPrompt').value;
+            const type = document.getElementById('contentType').value;
+            const img = document.getElementById('outputImage');
+            const video = document.getElementById('outputVideo');
+            const status = document.getElementById('statusMsg');
+            const actions = document.getElementById('actionArea');
+
             if(!prompt) return alert("Please enter something!");
-            document.getElementById('loadingMsg').style.display = 'block';
-            const img = document.getElementById('output');
+
+            status.style.display = 'block';
             img.style.display = 'none';
-            const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&seed=${Math.floor(Math.random()*1000)}`;
-            img.src = url;
-            img.onload = () => {
-                document.getElementById('loadingMsg').style.display = 'none';
-                img.style.display = 'block';
-            };
+            video.style.display = 'none';
+            actions.style.display = 'none';
+
+            const seed = Math.floor(Math.random() * 1000000);
+
+            if(type === 'image') {
+                const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}`;
+                img.src = url;
+                img.onload = () => {
+                    status.style.display = 'none';
+                    img.style.display = 'block';
+                    actions.style.display = 'flex';
+                    document.getElementById('downloadBtn').href = url;
+                };
+            } else {
+                // Video logic using Pollinations video endpoint
+                const videoUrl = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&model=video`;
+                video.src = videoUrl;
+                video.style.display = 'block';
+                status.style.display = 'none';
+                actions.style.display = 'flex';
+                document.getElementById('downloadBtn').href = videoUrl;
+            }
         }
     </script>
 </body>
 </html>
-
