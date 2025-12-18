@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vaishu AI - Gemini Ditto ✨</title>
+    <title>Vaishu AI - Final Fixed ✨</title>
     <style>
         :root {
             --bg-color: #131314;
@@ -17,7 +17,7 @@
             height: 100%; width: 100%; 
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
             overflow: hidden;
         }
         .container { display: flex; flex-direction: column; height: 100vh; max-width: 800px; margin: 0 auto; }
@@ -34,14 +34,14 @@
         }
         .message { max-width: 90%; line-height: 1.6; font-size: 16px; position: relative; word-wrap: break-word; }
         .user-msg { align-self: flex-end; background: var(--user-msg-bg); padding: 12px 20px; border-radius: 20px; color: #fff; }
-        .ai-msg { align-self: flex-start; background: var(--ai-msg-bg); padding: 0; width: 100%; display: flex; gap: 15px; white-space: pre-wrap; }
+        .ai-msg { align-self: flex-start; background: var(--ai-msg-bg); width: 100%; display: flex; gap: 15px; white-space: pre-wrap; }
         .ai-msg::before { content: '✨'; font-size: 20px; }
         
-        /* Input Area - Layout Fix */
+        /* Input Area - Layout Fix for 1000017128.jpg */
         .input-container { 
             padding: 15px; 
             background: var(--bg-color);
-            padding-bottom: calc(20px + env(safe-area-inset-bottom)); /* Navigation bar fix */
+            padding-bottom: calc(30px + env(safe-area-inset-bottom)); 
         }
         .input-wrapper { 
             display: flex; align-items: center; background: #1e1f20; 
@@ -53,28 +53,24 @@
         }
         .icon-btn { 
             background: transparent; border: none; cursor: pointer; 
-            color: #c4c7c5; font-size: 22px; padding: 8px; transition: 0.3s;
+            color: #c4c7c5; font-size: 22px; padding: 8px;
         }
-        .icon-btn:hover { color: #fff; }
         .send-btn { color: var(--accent-color); font-weight: bold; }
 
-        /* Typing Animation */
         .typing { color: #888; font-style: italic; font-size: 14px; margin-left: 35px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">Hello, <span>Vaishu</span></div>
-        
         <div id="chat-area">
-            <div class="ai-msg">I'm your personal AI. How can I help your graphic design work today?</div>
+            <div class="ai-msg">I'm ready to help you with graphic design or any information. Ask me anything!</div>
         </div>
-
         <div class="input-container">
             <div class="input-wrapper">
-                <button class="icon-btn" onclick="startVoice()" title="Voice Input">🎙️</button>
-                <input type="text" id="userInput" placeholder="Enter a prompt here">
-                <button class="icon-btn send-btn" onclick="askAI()" title="Send">🚀</button>
+                <button class="icon-btn" onclick="startVoice()">🎙️</button>
+                <input type="text" id="userInput" placeholder="Ask anything...">
+                <button class="icon-btn send-btn" onclick="askAI()">🚀</button>
             </div>
         </div>
     </div>
@@ -83,56 +79,33 @@
         const chatArea = document.getElementById('chat-area');
         const userInput = document.getElementById('userInput');
 
-        // Voice Recognition
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'te-IN';
-        function startVoice() { 
-            try {
-                recognition.start(); 
-                userInput.placeholder = "Listening... 🎙️"; 
-            } catch(e) { console.log("Mic already active"); }
-        }
-        
-        recognition.onresult = (e) => { 
-            userInput.value = e.results[0][0].transcript; 
-            userInput.placeholder = "Enter a prompt here"; 
-        };
+        function startVoice() { try { recognition.start(); userInput.placeholder = "Listening..."; } catch(e){} }
+        recognition.onresult = (e) => { userInput.value = e.results[0][0].transcript; };
 
         async function askAI() {
             const text = userInput.value;
             if(!text) return;
 
-            // Show User Message
             chatArea.innerHTML += `<div class="message user-msg">${text}</div>`;
             const tempId = "ai-" + Date.now();
-            
-            // Show Thinking State
-            chatArea.innerHTML += `<div class="message ai-msg" id="${tempId}"><div class="typing">Analysing and generating complete response... 🧠</div></div>`;
+            chatArea.innerHTML += `<div class="message ai-msg" id="${tempId}"><div class="typing">Searching for detailed info... 🧠</div></div>`;
             userInput.value = "";
             chatArea.scrollTop = chatArea.scrollHeight;
 
             try {
-                // OpenAI model for detailed and long responses
-                const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent(text + " (Provide a very long, detailed, and professional explanation in English. Use paragraphs and lists for clarity.)")}?model=openai`);
+                // 'search' బదులు 'openai' వాడాను, దీనివల్ల ఎర్రర్ రాదు
+                const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent(text + " (Provide a very long, detailed response in English)")}?model=openai`);
                 const reply = await r.text();
-                
-                // Set the full reply
                 document.getElementById(tempId).innerHTML = `<div>${reply}</div>`;
-                
-                // Voice feedback (Optional)
-                const speech = new SpeechSynthesisUtterance(reply.substring(0, 200)); // Only speak first 200 chars to avoid long audio
-                window.speechSynthesis.speak(speech);
-
             } catch (e) { 
-                document.getElementById(tempId).innerHTML = "Sorry, I encountered an error. Please try again."; 
+                document.getElementById(tempId).innerHTML = "Sorry, error occurred. Please try again."; 
             }
             chatArea.scrollTop = chatArea.scrollHeight;
         }
-
-        // Support Enter Key
-        userInput.addEventListener("keypress", (e) => { 
-            if (e.key === "Enter") askAI(); 
-        });
+        userInput.addEventListener("keypress", (e) => { if (e.key === "Enter") askAI(); });
     </script>
 </body>
 </html>
+
