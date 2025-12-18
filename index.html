@@ -4,92 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vaishu Super AI ✨</title>
+    <title>Vaishu Smart English AI 🚀</title>
     <style>
-        :root { --glow: #00f2fe; --bg: #000000; }
-        * { box-sizing: border-box; }
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; /* స్క్రీన్ కదలకుండా ఉండటానికి */
-        }
-        .full-container { 
-            display: flex; flex-direction: column; height: 100vh; width: 100%; 
-            padding: 10px; background: radial-gradient(circle at top, #001f3f, #000);
-        }
-        .header { 
-            padding: 15px; text-align: center; font-size: 22px; font-weight: bold; 
-            color: var(--glow); text-shadow: 0 0 10px var(--glow);
-        }
-        #chatDisplay { 
-            flex: 1; overflow-y: auto; padding: 15px; border-radius: 20px;
-            background: rgba(255,255,255,0.05); border: 1px solid #222;
-            margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px;
-        }
-        .msg { padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 15px; line-height: 1.4; }
-        .user { align-self: flex-end; background: #007bff; color: white; border-bottom-right-radius: 2px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; }
+        .header { padding: 15px; text-align: center; font-size: 22px; font-weight: bold; background: #111; color: #00f2fe; border-bottom: 2px solid #00f2fe; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; background: radial-gradient(circle at bottom, #001f3f, #000); }
+        .msg { padding: 12px 16px; border-radius: 20px; max-width: 85%; font-size: 16px; line-height: 1.5; }
+        .user { align-self: flex-end; background: #007bff; border-bottom-right-radius: 2px; }
         .ai { align-self: flex-start; background: #1a1a1a; border: 1px solid #333; border-bottom-left-radius: 2px; }
-        .input-box { 
-            background: #111; padding: 15px; border-radius: 20px; 
-            border: 1px solid #333; display: flex; flex-direction: column; gap: 10px;
-        }
-        input, select { 
-            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #444;
-            background: #000; color: white; font-size: 16px; outline: none;
-        }
-        .send-btn { 
-            background: var(--glow); color: black; border: none; padding: 15px;
-            border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer;
-        }
-        img, video { width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--glow); }
+        .footer { padding: 15px; background: #050505; border-top: 1px solid #333; display: flex; flex-direction: column; gap: 10px; }
+        .input-row { display: flex; gap: 10px; }
+        input { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #444; background: #111; color: white; font-size: 16px; }
+        .mic-btn { background: #ff4b2b; color: white; border: none; width: 50px; border-radius: 50%; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; }
+        .send-btn { background: #00f2fe; color: black; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .status { font-size: 12px; color: #ffd700; text-align: center; display: none; }
     </style>
 </head>
 <body>
-    <div class="full-container">
-        <div class="header">Vaishu Super AI ✨</div>
-        <div id="chatDisplay">
-            <div class="msg ai">Hello Vaishu! I am your Full-Screen AI. Ready to chat, draw, or make videos! 🚀</div>
+    <div class="header">Vaishu English AI 🎙️</div>
+    <div id="chat">
+        <div class="msg ai">Hi Vaishu! Speak in Telugu or English, I will reply in English very fast! 🚀</div>
+    </div>
+    <div class="footer">
+        <div id="status" class="status">Listening... 🎙️</div>
+        <div class="input-row">
+            <input type="text" id="prompt" placeholder="Talk or Type...">
+            <button class="mic-btn" onclick="startListen()">🎤</button>
         </div>
-        <div class="input-box">
-            <select id="mode">
-                <option value="chat">💬 Chat with AI</option>
-                <option value="image">🎨 Create Image</option>
-                <option value="video">🎬 Create Video</option>
-            </select>
-            <input type="text" id="userInput" placeholder="Ask me anything...">
-            <button class="send-btn" onclick="startMagic()">SEND MAGIC 🚀</button>
-        </div>
+        <button class="send-btn" onclick="askAI()">SEND MAGIC ✨</button>
     </div>
 
     <script>
-        async function startMagic() {
-            const input = document.getElementById('userInput').value;
-            const mode = document.getElementById('mode').value;
-            const chat = document.getElementById('chatDisplay');
-            if(!input) return;
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'te-IN'; // నువ్వు తెలుగులో మాట్లాడవచ్చు
 
-            chat.innerHTML += `<div class="msg user">${input}</div>`;
-            const aiId = "ai-" + Date.now();
-            chat.innerHTML += `<div class="msg ai" id="${aiId}">Thinking... 🧠</div>`;
-            document.getElementById('userInput').value = "";
-            chat.scrollTop = chat.scrollHeight;
+        function startListen() {
+            recognition.start();
+            document.getElementById('status').style.display = 'block';
+        }
 
-            const seed = Math.floor(Math.random() * 999999);
-            const aiMsg = document.getElementById(aiId);
+        recognition.onresult = (event) => {
+            const text = event.results[0][0].transcript;
+            document.getElementById('prompt').value = text;
+            document.getElementById('status').style.display = 'none';
+        };
+
+        async function askAI() {
+            const p = document.getElementById('prompt').value;
+            const c = document.getElementById('chat');
+            if(!p) return;
+
+            c.innerHTML += `<div class="msg user">${p}</div>`;
+            const id = "ai" + Date.now();
+            c.innerHTML += `<div class="msg ai" id="${id}">Thinking... 🧠</div>`;
+            document.getElementById('prompt').value = "";
+            c.scrollTop = c.scrollHeight;
 
             try {
-                if(mode === 'chat') {
-                    const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
-                    aiMsg.innerText = await r.text();
-                } else if(mode === 'image') {
-                    const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=1024&height=1024&seed=${seed}`;
-                    aiMsg.innerHTML = `Done! 🎨<br><img src="${url}">`;
-                } else {
-                    const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=512&height=512&seed=${seed}&model=video`;
-                    aiMsg.innerHTML = `Done! 🎬<br><video src="${url}" controls autoplay loop></video>`;
-                }
-            } catch (e) { aiMsg.innerText = "Error! Try again."; }
-            chat.scrollTop = chat.scrollHeight;
+                // ఇక్కడ మనం AI కి ఇంగ్లీష్‌లోనే సమాధానం ఇవ్వమని చెప్తున్నాం
+                const r = await fetch(`https://text.pollinations.ai/${encodeURIComponent(p + " (Reply only in English, be very concise)")}?model=openai`);
+                const reply = await r.text();
+                document.getElementById(id).innerText = reply;
+                
+                // Voice Output in English
+                const speech = new SpeechSynthesisUtterance(reply);
+                speech.lang = 'en-US';
+                window.speechSynthesis.speak(speech);
+
+            } catch (e) { document.getElementById(id).innerText = "Error, please try again."; }
+            c.scrollTop = c.scrollHeight;
         }
     </script>
 </body>
