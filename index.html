@@ -3,89 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaishu Super AI ✨</title>
+    <title>Vaishu Magic AI - Unlimited ✨</title>
     <style>
-        :root { --main: #00d2ff; --bg: #000428; }
-        body { background: linear-gradient(to right, #000428, #004e92); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 10px; margin: 0; }
-        .chat-container { max-width: 500px; margin: 20px auto; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 25px; border: 1px solid var(--main); box-shadow: 0 0 30px rgba(0,210,255,0.3); }
-        h2 { color: var(--main); text-shadow: 0 0 10px var(--main); }
-        #chatDisplay { height: 300px; overflow-y: auto; text-align: left; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 15px; margin-bottom: 15px; border: 1px solid #333; }
-        .msg { margin: 8px 0; padding: 10px; border-radius: 10px; max-width: 80%; }
-        .user-msg { background: var(--main); color: black; margin-left: auto; }
-        .ai-msg { background: #333; color: white; border: 1px solid var(--main); }
-        input, select { width: 85%; padding: 12px; border-radius: 15px; border: none; margin-top: 10px; outline: none; color: black; }
-        .btn { background: var(--main); color: black; border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer; width: 90%; font-weight: bold; margin-top: 15px; font-size: 16px; transition: 0.3s; }
-        .btn:active { transform: scale(0.95); }
-        img, video { width: 100%; border-radius: 15px; margin-top: 15px; display: none; border: 2px solid var(--main); }
-        .loading-text { color: #ffff00; font-size: 14px; display: none; margin-top: 5px; }
+        :root { --accent: #00f2fe; --bg: #000000; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
+        .app-container { max-width: 600px; margin: auto; border: 1px solid #333; border-radius: 20px; overflow: hidden; background: #050505; }
+        .header { background: linear-gradient(45deg, #4facfe, #00f2fe); padding: 15px; color: black; font-weight: bold; font-size: 20px; }
+        #chatBox { height: 400px; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 12px; border-radius: 15px; max-width: 85%; font-size: 15px; line-height: 1.4; }
+        .user { align-self: flex-end; background: #0084ff; color: white; }
+        .ai { align-self: flex-start; background: #222; border: 1px solid #444; }
+        .input-area { padding: 15px; background: #111; display: flex; flex-direction: column; gap: 10px; }
+        input, select { padding: 12px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: white; outline: none; }
+        .send-btn { background: #00f2fe; color: black; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        img, video { width: 100%; border-radius: 10px; margin-top: 10px; display: block; border: 1px solid var(--accent); }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <h2>Vaishu Super AI ✨</h2>
-        <div id="chatDisplay">
-            <div class="msg ai-msg">Hello Vaishu! I am your AI. How can I help you today?</div>
+    <div class="app-container">
+        <div class="header">Vaishu Magic AI ✨</div>
+        <div id="chatBox">
+            <div class="msg ai">Hi Vaishu! I am your free AI assistant. I can chat, draw images, and make videos without any limits! 🚀</div>
         </div>
-        
-        <input type="text" id="userInput" placeholder="Ask anything or describe image...">
-        
-        <select id="mode">
-            <option value="chat">Chat with AI 💬</option>
-            <option value="image">Create Image 🎨</option>
-            <option value="video">Create Video 🎬</option>
-        </select>
-
-        <button class="btn" onclick="startMagic()">Send / Create 🚀</button>
-        <p id="status" class="loading-text">Processing... Please wait ✨</p>
-        
-        <div id="mediaArea">
-            <img id="outImg" src="">
-            <video id="outVid" controls autoplay loop muted></video>
+        <div class="input-area">
+            <select id="mode">
+                <option value="chat">💬 Chat with me</option>
+                <option value="image">🎨 Create Unlimited Image</option>
+                <option value="video">🎬 Create Unlimited Video</option>
+            </select>
+            <input type="text" id="userInput" placeholder="Ask me or Describe image...">
+            <button class="send-btn" onclick="processAI()">Send Magic 🚀</button>
         </div>
     </div>
 
     <script>
-        async function startMagic() {
+        async function processAI() {
             const input = document.getElementById('userInput').value;
             const mode = document.getElementById('mode').value;
-            const display = document.getElementById('chatDisplay');
-            const img = document.getElementById('outImg');
-            const vid = document.getElementById('outVid');
-            const status = document.getElementById('status');
+            const chatBox = document.getElementById('chatBox');
+            if(!input) return;
 
-            if(!input) return alert("Please type something!");
+            // User Message
+            chatBox.innerHTML += `<div class="msg user">${input}</div>`;
+            const loadingId = "loading-" + Date.now();
+            chatBox.innerHTML += `<div class="msg ai" id="${loadingId}">Thinking... ✨</div>`;
+            document.getElementById('userInput').value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-            display.innerHTML += `<div class="msg user-msg">${input}</div>`;
-            display.scrollTop = display.scrollHeight;
-            img.style.display = 'none';
-            vid.style.display = 'none';
-            status.style.display = 'block';
-
-            const seed = Math.floor(Math.random() * 1000000);
+            const seed = Math.floor(Math.random() * 999999);
+            const loadingMsg = document.getElementById(loadingId);
 
             try {
                 if(mode === 'chat') {
-                    const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
-                    const text = await response.text();
-                    display.innerHTML += `<div class="msg ai-msg">${text}</div>`;
+                    const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
+                    const text = await res.text();
+                    loadingMsg.innerText = text;
                 } else if(mode === 'image') {
-                    const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=512&height=512&seed=${seed}`;
-                    img.src = url;
-                    img.style.display = 'block';
-                    display.innerHTML += `<div class="msg ai-msg">Image created! 🎨</div>`;
+                    const imgUrl = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=1080&height=1080&seed=${seed}`;
+                    loadingMsg.innerHTML = `Here is your image: <br><img src="${imgUrl}">`;
                 } else {
-                    const url = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=512&height=512&seed=${seed}&model=video`;
-                    vid.src = url;
-                    vid.style.display = 'block';
-                    display.innerHTML += `<div class="msg ai-msg">Video generated! 🎬</div>`;
+                    const vidUrl = `https://pollinations.ai/p/${encodeURIComponent(input)}?width=512&height=512&seed=${seed}&model=video`;
+                    loadingMsg.innerHTML = `Here is your video: <br><video src="${vidUrl}" controls autoplay loop></video>`;
                 }
-            } catch (err) {
-                display.innerHTML += `<div class="msg ai-msg">Sorry, something went wrong.</div>`;
+            } catch (e) {
+                loadingMsg.innerText = "Error! Try again.";
             }
-
-            status.style.display = 'none';
-            display.scrollTop = display.scrollHeight;
-            document.getElementById('userInput').value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>
