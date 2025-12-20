@@ -1,82 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="te">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaishu Magic Studio AI ✨</title>
+    <title>వైషు రాండమ్ వీడియో కాల్</title>
     <style>
-        :root { --main: #ff007f; --bg: #0f0c29; }
-        body { background: var(--bg); color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-        .container { max-width: 400px; margin: auto; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; border: 2px solid var(--main); box-shadow: 0 0 20px var(--main); }
-        input, select { width: 90%; padding: 12px; border-radius: 20px; border: none; margin-bottom: 10px; font-size: 16px; outline: none; }
-        .btn { background: var(--main); color: white; border: none; padding: 12px 25px; border-radius: 20px; cursor: pointer; width: 100%; font-weight: bold; font-size: 18px; margin-top: 10px; transition: 0.3s; }
-        .btn:active { transform: scale(0.95); }
-        #outputImage, #outputVideo { width: 100%; border-radius: 15px; margin-top: 15px; display: none; border: 2px solid white; }
-        .loading { display: none; color: #ffff00; margin-top: 10px; font-weight: bold; }
-        .action-btns { display: none; gap: 10px; margin-top: 15px; }
-        .save-btn { background: #34b7f1; flex: 1; padding: 10px; border-radius: 10px; color: white; text-decoration: none; font-weight: bold; }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f2f5; }
+        video { width: 45%; max-width: 400px; background: #000; border-radius: 15px; margin: 10px; border: 3px solid #007bff; }
+        .btn-container { margin-top: 20px; }
+        button { padding: 15px 30px; font-size: 18px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        button:hover { background: #218838; }
+        h1 { color: #007bff; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Vaishu Magic Studio ✨</h2>
-        <input type="text" id="userPrompt" placeholder="What to create? (English)">
-        
-        <select id="contentType">
-            <option value="image">Create Image 🎨</option>
-            <option value="video">Create Video 🎬</option>
-        </select>
 
-        <button class="btn" onclick="generateContent()">Start Magic 🚀</button>
-        
-        <p id="statusMsg" class="loading">Magic in progress... 🪄</p>
-        
-        <img id="outputImage" src="">
-        <video id="outputVideo" controls autoplay loop muted></video>
-
-        <div id="actionArea" class="action-btns">
-            <a id="downloadBtn" class="save-btn" href="#" download="vaishu_magic.png">Save 📥</a>
-        </div>
+    <h1>వైషు రాండమ్ వీడియో కాల్ 🎥</h1>
+    
+    <video id="localVideo" autoplay muted playsinline></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+    
+    <div class="btn-container">
+        <button id="nextBtn">వేరే వాళ్ళకి కనెక్ట్ చెయ్యి (Next Match)</button>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <script>
-        function generateContent() {
-            const prompt = document.getElementById('userPrompt').value;
-            const type = document.getElementById('contentType').value;
-            const img = document.getElementById('outputImage');
-            const video = document.getElementById('outputVideo');
-            const status = document.getElementById('statusMsg');
-            const actions = document.getElementById('actionArea');
+        // నీ Firebase సెట్టింగ్స్
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiv1PvWtASMNyu0fpXnOn1-B9ah-DeO6w",
+            authDomain: "vaishu-random-call.firebaseapp.com",
+            databaseURL: "https://vaishu-random-call-default-rtdb.firebaseio.com",
+            projectId: "vaishu-random-call",
+            storageBucket: "vaishu-random-call.firebasestorage.app",
+            messagingSenderId: "616195985310"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-            if(!prompt) return alert("Please enter something!");
+        // బటన్ నొక్కినప్పుడు వచ్చే మెసేజ్
+        document.getElementById('nextBtn').onclick = () => {
+            alert("వేరే వ్యక్తి కోసం వెతుకుతున్నాను... కాసేపు ఆగండి!");
+            // ఇక్కడ రాండమ్ మ్యాచ్ లాజిక్ రన్ అవుతుంది
+        };
 
-            status.style.display = 'block';
-            img.style.display = 'none';
-            video.style.display = 'none';
-            actions.style.display = 'none';
-
-            const seed = Math.floor(Math.random() * 1000000);
-
-            if(type === 'image') {
-                const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}`;
-                img.src = url;
-                img.onload = () => {
-                    status.style.display = 'none';
-                    img.style.display = 'block';
-                    actions.style.display = 'flex';
-                    document.getElementById('downloadBtn').href = url;
-                };
-            } else {
-                const videoUrl = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&model=video`;
-                video.src = videoUrl;
-                video.onloadeddata = () => {
-                    status.style.display = 'none';
-                    video.style.display = 'block';
-                    actions.style.display = 'flex';
-                    document.getElementById('downloadBtn').href = videoUrl;
-                };
-            }
-        }
+        console.log("Firebase కనెక్ట్ అయ్యింది!");
     </script>
 </body>
 </html>
