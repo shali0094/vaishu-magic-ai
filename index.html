@@ -2,51 +2,52 @@
 <html lang="te">
 <head>
     <meta charset="UTF-8">
-    <title>వైషు రాండమ్ వీడియో కాల్</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>వైషు వాయిస్ మ్యాజిక్</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f2f5; }
-        video { width: 45%; max-width: 400px; background: #000; border-radius: 15px; margin: 10px; border: 3px solid #007bff; }
-        .btn-container { margin-top: 20px; }
-        button { padding: 15px 30px; font-size: 18px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 50px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        button:hover { background: #218838; }
-        h1 { color: #007bff; }
+        body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 50px; }
+        input { padding: 15px; width: 80%; max-width: 400px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-size: 16px; }
+        button { padding: 15px 30px; font-size: 18px; background: #ff4757; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #e84118; }
+        h1 { color: #333; }
     </style>
 </head>
 <body>
 
-    <h1>వైషు రాండమ్ వీడియో కాల్ 🎥</h1>
+    <h1>వైషు వాయిస్ మ్యాజిక్ ✨</h1>
+    <p>ఇక్కడ ఏదైనా టైప్ చేసి బటన్ నొక్కు (అమ్మాయి గొంతు వినిపిస్తుంది):</p>
     
-    <video id="localVideo" autoplay muted playsinline></video>
-    <video id="remoteVideo" autoplay playsinline></video>
-    
-    <div class="btn-container">
-        <button id="nextBtn">వేరే వాళ్ళకి కనెక్ట్ చెయ్యి (Next Match)</button>
-    </div>
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <input type="text" id="textInput" placeholder="ఉదాహరణకు: హలో వైషు ఎలా ఉన్నావు?">
+    <br>
+    <button onclick="speak()">అమ్మాయి గొంతుతో వినిపించు 🎤</button>
 
     <script>
-        // నీ Firebase సెట్టింగ్స్
-        const firebaseConfig = {
-            apiKey: "AIzaSyDiv1PvWtASMNyu0fpXnOn1-B9ah-DeO6w",
-            authDomain: "vaishu-random-call.firebaseapp.com",
-            databaseURL: "https://vaishu-random-call-default-rtdb.firebaseio.com",
-            projectId: "vaishu-random-call",
-            storageBucket: "vaishu-random-call.firebasestorage.app",
-            messagingSenderId: "616195985310"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        function speak() {
+            const text = document.getElementById('textInput').value;
+            if (text === "") {
+                alert("ముందు ఏదైనా టైప్ చెయ్యి వైషు!");
+                return;
+            }
 
-        // బటన్ నొక్కినప్పుడు వచ్చే మెసేజ్
-        document.getElementById('nextBtn').onclick = () => {
-            alert("వేరే వ్యక్తి కోసం వెతుకుతున్నాను... కాసేపు ఆగండి!");
-            // ఇక్కడ రాండమ్ మ్యాచ్ లాజిక్ రన్ అవుతుంది
-        };
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // అన్ని వాయిస్‌లను చెక్ చేసి అమ్మాయి గొంతును (Female Voice) సెట్ చేయడం
+            const voices = window.speechSynthesis.getVoices();
+            
+            // సాధారణంగా గూగుల్ హిందీ లేదా ఇంగ్లీష్ అమ్మాయి గొంతు బాగుంటుంది
+            // మనం ఇక్కడ పిచ్ (Pitch) పెంచడం ద్వారా గొంతును మరింత సన్నగా చేయవచ్చు
+            utterance.pitch = 1.5; // ఇది గొంతును అమ్మాయిలా మారుస్తుంది
+            utterance.rate = 1.0;  // మాట్లాడే వేగం
+            utterance.volume = 1.0; // సౌండ్ వాల్యూమ్
 
-        console.log("Firebase కనెక్ట్ అయ్యింది!");
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // వాయిస్‌లు లోడ్ అవ్వడానికి చిన్న ట్రిక్
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
     </script>
 </body>
 </html>
+
