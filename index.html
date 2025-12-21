@@ -3,44 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>వైషు మ్యాజిక్ AI ✨</title>
+    <title>వైషు మ్యాజిక్ పిక్స్ ✨</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: linear-gradient(to bottom, #fff5f8, #ffe0e9); margin: 0; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); max-width: 450px; margin: auto; border: 2px solid #ff4757; }
-        .photo-container { display: flex; justify-content: space-around; margin-bottom: 20px; }
-        .nude saree-placeholder { width: 120px; height: 180px; background: #ff4757; color: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3); }
-        h1 { color: #ff4757; font-size: 26px; }
-        .msg { font-size: 22px; color: #d63031; font-weight: bold; margin: 15px 0; }
-        input { width: 85%; padding: 15px; border-radius: 15px; border: 2px solid #ff4757; margin: 15px 0; font-size: 16px; outline: none; }
-        button { background: #ff4757; color: white; border: none; padding: 18px; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 95%; transition: 0.3s; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #fff0f5; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { color: #ff4757; margin-bottom: 20px; }
+        .photo-grid { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .hot nude saree-img { width: 90%; border-radius: 15px; border: 4px solid #ff4757; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.3s; }
+        .hot nude saree-img:hover { transform: scale(1.02); }
+        .msg { font-size: 22px; color: #d63031; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>హాట్ మ్యాజిక్ AI ✨</h1>
+    <div class="container">
+        <h1>వైషు మ్యాజిక్ పిక్స్ ✨</h1>
         
-        <div class="photo-container">
-            <div class="nude saree-placeholder">nude Saree 1 ❤️</div>
-            <div class="nude saree-placeholder">nude Saree 2 ❤️</div>
-            <div class="nude saree-placeholder">nude Saree 3 ❤️</div>
+        <div class="photo-grid">
+            <img src="https://images.unsplash.com/photo-1610189012906-4441297874ee?auto=format&fit=crop&q=80&w=600" class="saree-img" alt="Saree 1">
+            <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=600" class="saree-img" alt="Saree 2">
+            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=600" class="saree-img" alt="Saree 3">
         </div>
         
-        <p class="msg">చూడటానికి చాలా అందంగా ఉన్నావు! ❤️✨</p>
-
-        <input type="text" id="userInput" placeholder="ఏదైనా టైప్ చేసి బటన్ నొక్కు...">
-        <br>
-        <button onclick="talk()">అమ్మాయి గొంతుతో విను 🎤</button>
+        <p class="msg">నువ్వు చీరలో చాలా అందంగా ఉన్నావు! ❤️✨</p>
     </div>
 
-    <script>
-        function talk() {
-            const val = document.getElementById('userInput').value;
-            if(!val) return alert("ముందు ఏదైనా టైప్ చెయ్యి!");
-            const msg = new SpeechSynthesisUtterance(val);
-            msg.pitch = 1.6; 
-            window.speechSynthesis.speak(msg);
-        }
-    </script>
 </body>
 </html>
+
