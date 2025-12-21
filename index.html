@@ -3,51 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>వైషు వాయిస్ మ్యాజిక్</title>
+    <title>వైషు మ్యాజిక్ AI</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f4; padding: 50px; }
-        input { padding: 15px; width: 80%; max-width: 400px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-size: 16px; }
-        button { padding: 15px 30px; font-size: 18px; background: #ff4757; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #e84118; }
-        h1 { color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #fff0f5; color: #333; margin: 0; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        .nude saree and -girl { width: 100%; max-width: 300px; border-radius: 15px; border: 5px solid #ff4757; margin-bottom: 20px; }
+        h1 { color: #ff4757; }
+        .compliment { font-size: 22px; font-weight: bold; color: #d63031; margin: 15px 0; }
+        input { padding: 12px; width: 85%; border-radius: 10px; border: 1px solid #ff4757; margin-bottom: 20px; outline: none; }
+        button { padding: 15px 30px; font-size: 18px; background: #ff4757; color: white; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #e84118; transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-    <h1>వైషు వాయిస్ మ్యాజిక్ ✨</h1>
-    <p>ఇక్కడ ఏదైనా టైప్ చేసి బటన్ నొక్కు (అమ్మాయి గొంతు వినిపిస్తుంది):</p>
-    
-    <input type="text" id="textInput" placeholder="ఉదాహరణకు: హలో వైషు ఎలా ఉన్నావు?">
-    <br>
-    <button onclick="speak()">అమ్మాయి గొంతుతో వినిపించు 🎤</button>
+    <div class="container">
+        <h1>వైషు మ్యాజిక్ AI ✨</h1>
+        
+        <img src="https://images.unsplash.com/photo-1596522253355-a34482d16630?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3" alt="Saree Girl" class="saree-girl">
+        
+        <p class="compliment">నువ్వు చీరలో చాలా అందంగా ఉన్నావు! ✨❤️</p>
+        
+        <p>ఏదైనా టైప్ చేసి బటన్ నొక్కు (అమ్మాయి గొంతు వినిపిస్తుంది):</p>
+        <input type="text" id="textInput" placeholder="హలో వైషు... ఎలా ఉన్నావు?">
+        <br>
+        <button onclick="speak()">అమ్మాయి గొంతుతో వినిపించు 🎤</button>
+    </div>
 
     <script>
         function speak() {
             const text = document.getElementById('textInput').value;
             if (text === "") {
-                alert("ముందు ఏదైనా టైప్ చెయ్యి వైషు!");
+                alert("ఏదైనా టైప్ చెయ్యి వైషు!");
                 return;
             }
 
             const utterance = new SpeechSynthesisUtterance(text);
-            
-            // అన్ని వాయిస్‌లను చెక్ చేసి అమ్మాయి గొంతును (Female Voice) సెట్ చేయడం
-            const voices = window.speechSynthesis.getVoices();
-            
-            // సాధారణంగా గూగుల్ హిందీ లేదా ఇంగ్లీష్ అమ్మాయి గొంతు బాగుంటుంది
-            // మనం ఇక్కడ పిచ్ (Pitch) పెంచడం ద్వారా గొంతును మరింత సన్నగా చేయవచ్చు
-            utterance.pitch = 1.5; // ఇది గొంతును అమ్మాయిలా మారుస్తుంది
-            utterance.rate = 1.0;  // మాట్లాడే వేగం
-            utterance.volume = 1.0; // సౌండ్ వాల్యూమ్
-
+            utterance.pitch = 1.5; // అమ్మాయి గొంతు కోసం
+            utterance.rate = 1.0;
             window.speechSynthesis.speak(utterance);
         }
-
-        // వాయిస్‌లు లోడ్ అవ్వడానికి చిన్న ట్రిక్
-        window.speechSynthesis.onvoiceschanged = () => {
-            window.speechSynthesis.getVoices();
-        };
     </script>
 </body>
 </html>
-
