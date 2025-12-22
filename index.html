@@ -2,35 +2,76 @@
 <html lang="te">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>పర్సనల్ గ్యాలరీ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Video Generator - Pro</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background-color: #000; color: white; margin: 0; padding: 20px; }
-        .main-container { max-width: 600px; margin: auto; border: 1px solid #333; padding: 15px; border-radius: 10px; }
-        h1 { color: #ff4081; }
-        .photo-list { display: flex; flex-direction: column; gap: 30px; }
-        .img-box { width: 100%; border: 2px solid #ff4081; border-radius: 8px; overflow: hidden; background: #111; }
-        img { width: 100%; display: block; min-height: 200px; }
-        .msg { margin-top: 20px; font-size: 18px; color: #ff80ab; font-weight: bold; }
+        * { box-sizing: border-box; }
+        body { background: #000; color: #fff; font-family: -apple-system, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; justify-content: center; align-items: center; }
+        
+        /* యాప్ లాంటి క్లీన్ డిజైన్ */
+        .app-container { width: 90%; max-width: 400px; text-align: center; }
+        .logo { font-size: 24px; font-weight: 800; margin-bottom: 30px; letter-spacing: -1px; color: #fff; }
+        
+        /* అప్‌లోడ్ బాక్స్ */
+        .upload-area { width: 100%; aspect-ratio: 1/1; background: #111; border: 1px solid #222; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; }
+        .upload-icon { font-size: 40px; margin-bottom: 10px; }
+        
+        /* బటన్ స్టైల్ */
+        .gen-button { width: 100%; background: #fff; color: #000; border: none; padding: 18px; border-radius: 50px; font-weight: bold; font-size: 16px; margin-top: 25px; cursor: pointer; transition: 0.3s; }
+        .gen-button:active { transform: scale(0.95); }
+
+        /* వీడియో మరియు లోడర్ */
+        #video-result { display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 24px; }
+        #loader { display: none; font-size: 14px; color: #888; margin-top: 15px; }
+
+        /* పేమెంట్ లింక్ (దాచి ఉంచబడింది) */
+        .footer-link { margin-top: 30px; font-size: 12px; color: #333; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <h1> "sex images" </h1> ✨</h1>
+    <div class="app-container">
+        <div class="logo">VISHU AI</div>
         
-        <div class="photo-list">
-            <div class="img-box">
-                <img src="sex images" alt="Personal Style 1">
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div id="upload-ui">
+                <div class="upload-icon">＋</div>
+                <div style="font-size: 14px; color: #555;">Upload Photo to Animate</div>
             </div>
-
-            <div class="img-box">
-                <img src="sex images"  alt="Personal Style 2">
-            </div>
+            <video id="video-result" loop playsinline muted></video>
         </div>
+
+        <input type="file" id="fileInput" hidden onchange="handleFile(event)">
+        <button class="gen-button" onclick="startGeneration()">GENERATE VIDEO</button>
         
-        <p class="msg">ఇది నీ పర్సనల్ గ్యాలరీ! ❤️</p>
+        <div id="loader">⚡ Generating AI Motion...</div>
+
+        <a href="upi://pay?pa=9100911202@ibl&pn=Vishu&am=199&cu=INR" class="footer-link">Pro Version Available</a>
     </div>
+
+    <script>
+        function handleFile(event) {
+            if(event.target.files[0]) {
+                alert("Photo Selected! Now click on Generate.");
+            }
+        }
+
+        function startGeneration() {
+            const file = document.getElementById('fileInput').files[0];
+            if(!file) return alert("Please select a photo first!");
+
+            document.getElementById('upload-ui').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                const video = document.getElementById('video-result');
+                video.src = "https://assets.mixkit.co/videos/preview/mixkit-abstract-flowing-neon-waves-34444-large.mp4";
+                video.style.display = 'block';
+                video.play();
+            }, 3000);
+        }
+    </script>
 
 </body>
 </html>
